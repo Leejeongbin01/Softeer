@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int N;
+int score[4][100001];
+int score_org[4][100001];
+map<int, int> m1,m2,m3,m4;
+
+void check(int num, map<int, int>&m){
+    int tmp = score[num][0];
+    m[tmp]++;
+    for(int i=1; i<N; i++){
+        if(tmp!=score[num][i]){
+            tmp = score[num][i];
+            m[tmp] = i+1;
+        }
+    }
+}
+
+int main(){
+    cin>>N;
+
+    for(int i=0; i<3; i++){
+        for(int j=0; j<N; j++){
+            int a;
+            cin>>a;
+            score[i][j]=a;
+            score[3][j] += a;
+            score_org[i][j]=a;
+            score_org[3][j] += a;
+        }
+    }
+
+    for(int i=0; i<4; i++){
+        sort(score[i], score[i]+N, greater<>());
+    }
+
+    check(0, m1);
+    check(1, m2);
+    check(2, m3);
+    check(3, m4);
+
+    for(int i=0; i<N; i++){
+        cout<<m1[score_org[0][i]]<<" ";
+    }
+    cout<<endl;
+
+    for(int i=0; i<N; i++){
+        cout<<m2[score_org[1][i]]<<" ";
+    }
+    cout<<endl;
+
+    for(int i=0; i<N; i++){
+        cout<<m3[score_org[2][i]]<<" ";
+    }
+    cout<<endl;
+
+    for(int i=0; i<N; i++){
+        cout<<m4[score_org[3][i]]<<" ";
+    }
+    cout<<endl;
+
+    return 0;
+}
