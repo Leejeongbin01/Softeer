@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int H,K,R;
+queue<int> q[3000][2]; // left = 0, right = 1
+
+
+int main(){
+    cin >> H >> K >> R;
+
+    for(int i=(1<<H); i<(1<<(1+H)); i++){
+        for(int j=1; j<=K; j++){
+            int a;
+            cin>>a;
+            if(j%2==1){
+                q[i][0].push(a);
+            }
+            else{
+                q[i][1].push(a);
+            }
+        }
+    }
+
+    int ans=0;
+    for(int i=1; i<=R; i++){
+        if( i % 2 == 0 && q[1][1].empty() == false){
+            ans += q[1][1].front();
+            q[1][1].pop();
+        }
+        if( i % 2 == 1 && q[1][0].empty() == false){
+            ans += q[1][0].front();
+            q[1][0].pop();
+        }
+
+        for(int j=1; j<=H; j++){
+            for(int t = (1<<j); t < (1 << (j+1)); t++){
+                if(i % 2 == 1){ // left, 홀수
+                    if( t % 2  == 1 && q[t][0].empty() == false){
+                        q[t>>1][1].push(q[t][0].front());
+                        q[t][0].pop();
+                    }
+                    if( t % 2 == 0 && q[t][0].empty() == false){
+                        q[t>>1][0].push(q[t][0].front());
+                        q[t][0].pop();
+                    }
+                }
+                else{
+                    if( t % 2  == 1 && q[t][1].empty() == false){
+                        q[t>>1][1].push(q[t][1].front());
+                        q[t][1].pop();
+                    }
+                    if( t % 2 == 0 && q[t][1].empty() == false){
+                        q[t>>1][0].push(q[t][1].front());
+                        q[t][1].pop();
+                    }
+                }
+            }
+        }
+    }
+    cout<<ans;
+    
+    return 0;
+}
